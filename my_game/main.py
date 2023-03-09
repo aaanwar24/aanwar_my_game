@@ -1,10 +1,10 @@
 # File created by Abdullah Anwar 
 
-# import libs
+# import libraries
 import pygame as pg
 import random
 import os
-# import settings 
+# import settings
 from settings import *
 from sprites import *
 # from pg.sprite import Sprite
@@ -22,19 +22,25 @@ def get_mouse_now():
 pg.init()
 # init sound mixer
 pg.mixer.init()
-screen = pg.display.set_mode((WIDTH, HEIGHT))
+screen = pg.display.set_mode((WIDTH, HEIGHT)) 
 pg.display.set_caption("My first game...")
 clock = pg.time.Clock() 
 
 all_sprites = pg.sprite.Group()
 enemies = pg.sprite.Group()
+pewpews = pg.sprite.Group()
+
+# player is instantiated here
 player = Player()
+invader = Mob() 
+
 # testSprite = Sprite()
 # testSprite.image = pg.Surface((50,50))
 # testSprite.image.fill(GREEN)
 # testSprite.rect = testSprite.image.get_rect()
 # testSprite.rect.center = (WIDTH / 2, HEIGHT / 2)
 all_sprites.add(player)
+all_sprites.add(invader)
 # all_sprites.add(testSprite)
 
 # game loop
