@@ -1,4 +1,5 @@
-# file created by Abdullah Anwar 
+# file created by Abdullah Anwar
+
 # screen dimensions
 WIDTH = 800
 HEIGHT = 600
@@ -9,11 +10,12 @@ RUNNING = True
 
 # player attributes
 PLAYER_ACC  = 2
-MOB_ACC = 1 
+MOB_ACC = 2
+
 PLAYER_FRICTION = -0.12
-MOB_FRICTION = 0.12
+MOB_FRICTION = -0.12
 
 # colors
 BLACK = (0,0,0)
 BLUE = (50, 50, 255)
-RED = (255,0,0)
+RED = (255, 50, 50)

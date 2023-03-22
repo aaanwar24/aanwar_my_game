@@ -1,6 +1,8 @@
 # File created by Abdullah Anwar 
 
 # import libraries
+# testing changes with this line...more editssss....
+# import libraries
 import pygame as pg
 import random
 import os
@@ -8,6 +10,9 @@ import os
 from settings import *
 from sprites import *
 # from pg.sprite import Sprite
+
+vec = pg.math.Vector2
+from random import randint 
 
 # set up assets folders
 game_folder = os.path.dirname(__file__)
@@ -18,7 +23,7 @@ def get_mouse_now():
     return (x,y)
 
 
-# init pg and create window
+# init pg and create windowo
 pg.init()
 # init sound mixer
 pg.mixer.init()
@@ -32,7 +37,8 @@ pewpews = pg.sprite.Group()
 
 # player is instantiated here
 player = Player()
-invader = Mob() 
+invader = Mob()
+invader.vel = vec(randint(0,20),randint(0,20))
 
 # testSprite = Sprite()
 # testSprite.image = pg.Surface((50,50))
