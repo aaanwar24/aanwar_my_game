@@ -1,20 +1,24 @@
-# file created by NOLAN AGAH\
+# file created by Abdullah Anwar
 import pygame as pg
 from pygame.sprite import Sprite
 from setting2 import *
 from random import randint
 import os
 
-# game_folder = os.path.dirname(__file__)
-
 vec = pg.math.Vector2
 
 # player class
-
+# This next chunk of code defines how the player works. There are a variety of things that the player does.
+# The block begins by defining the properties of the sprite, such as where it spawns and how fast it moves.
+# Following that is the defintions of how the Player moves, which is with the A and D keys on the keyboard. 
+# The -PLAYER JUMP keeps the sprite moving on the platform defined by the user rather than jumping whenever 
+# the two are touching at all. FOllowing that, the computer indicates where the Player is and whether ot not 
+# the player is still on the screen. If the player is off the screen, it prints that out. 
+# Although I did not get the collide function to work, I left it in there for the future so that it can work 
+# during my final project. 
 class Player(Sprite):
     def __init__(self, game):
         Sprite.__init__(self)
-        # these are the properties
         self.game = game
         self.image = pg.Surface((50,50))
         self.image.fill(BLACK)
@@ -27,22 +31,11 @@ class Player(Sprite):
         self.canjump = False
     def input(self):
         keystate = pg.key.get_pressed()
-        # if keystate[pg.K_w]:
-        #     self.acc.y = -PLAYER_ACC
         if keystate[pg.K_a]:
             self.acc.x = -PLAYER_ACC
-        # if keystate[pg.K_s]:
-        #     self.acc.y = PLAYER_ACC
         if keystate[pg.K_d]:
             self.acc.x = PLAYER_ACC
-        # if keystate[pg.K_p]:
-        #     if PAUSED == False:
-        #         PAUSED = True
-        #         print(PAUSED)
-        #     else:
-        #         PAUSED = False
-        #         print(PAUSED)
-    # ...
+
     def jump(self):
         self.rect.x += 1
         hits = pg.sprite.spritecollide(self, self.game.platforms, False)
@@ -52,17 +45,13 @@ class Player(Sprite):
     
     def inbounds(self):
         if self.rect.x > WIDTH - 50:
-            self.pos.x = WIDTH - 25
-            self.vel.x = 0
-            print("i am off the right side of the screen...")
+            self.vel.x = -5
         if self.rect.x < 0:
-            self.pos.x = 25
-            self.vel.x = 0
-            print("i am off the left side of the screen...")
+            self.vel.x = 5
         if self.rect.y > HEIGHT:
-            print("i am off the bottom of the screen")
+            self.rect.y = -5 
         if self.rect.y < 0:
-            print("i am off the top of the screen...")
+            self.rect.y = 5 
     def mob_collide(self):
             hits = pg.sprite.spritecollide(self, self.game.enemies, True)
             if hits:
@@ -76,21 +65,11 @@ class Player(Sprite):
         self.vel += self.acc
         self.pos += self.vel + 0.5 * self.acc
         self.rect.midbottom = self.pos
+    
 
-class Coin(Sprite):
-    def __init__(self,x,y):
-        Sprite.__init__(self)
-        self.width = 35
-        self.height = 45
-        self.image = pg.Surface((self.width, self.height))
-        self.image_fill = WHITE
-    # def player_collide(self):
-    #     hits = pg.sprite.spritecollide(self, self.game.coins,True)
-    #     if hits:
-    #         self.game.score += 1
-
-
-
+# This next class is the Mob class, or the small red red squares that travel across the screen. 
+# Just as were defined for the Player class, the Mob class has the location and velocity defined, although the velocity
+# is randomized. The inbounds keeps the Mobs on the screen rather than floating off.
 class Mob(Sprite):
     def __init__(self,width,height, color):
         Sprite.__init__(self)
@@ -105,28 +84,23 @@ class Mob(Sprite):
         self.vel = vec(randint(1,5),randint(1,5))
         self.acc = vec(1,1)
         self.cofric = 0.01
-    # ...
+    
     def inbounds(self):
         if self.rect.x > WIDTH:
             self.vel.x *= -1
-            # self.acc = self.vel * -self.cofric
         if self.rect.x < 0:
             self.vel.x *= -1
-            # self.acc = self.vel * -self.cofric
         if self.rect.y < 0:
             self.vel.y *= -1
-            # self.acc = self.vel * -self.cofric
         if self.rect.y > HEIGHT:
             self.vel.y *= -1
-            # self.acc = self.vel * -self.cofric
     def update(self):
         self.inbounds()
-        # self.pos.x += self.vel.x
-        # self.pos.y += self.vel.y
         self.pos += self.vel
         self.rect.center = self.pos
 
-# create a new platform class...
+# This creates a Platform class so that the user can use the same block of code to create different platforms. 
+# All the user has to do is define the given parameters for the platform and it will be made to do so as show in the setting2 file. 
 
 class Platform(Sprite):
     def __init__(self, x, y, width, height, color, variant):

@@ -34,6 +34,7 @@ class Game:
         self.platforms = pg.sprite.Group()
         self.enemies = pg.sprite.Group()
         self.player = Player(self)
+        self.health = 500
         self.plat1 = Platform(WIDTH, 50, 0, HEIGHT-50, (150,150,150), "normal")
         self.all_sprites.add(self.plat1)
 
@@ -51,6 +52,7 @@ class Game:
 
 
         self.run()
+    # The run function as shown here with self being the only parameter defines what happens in the game as the values are True
     def run(self):
         self.playing = True
         while self.playing:
@@ -58,7 +60,8 @@ class Game:
             self.events()
             self.update()
             self.draw()
-    
+    # This block defines the keys for jumping and quitting the game. By pressing the X, the game becomes false and shuts down the
+    # window. By pressing the space key, the player jumps. 
     def events(self):
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -68,6 +71,8 @@ class Game:
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_SPACE:
                     self.player.jump()
+    # This function is the draw_text function, and what it does is it allows the user to draw text on the screen taking a variety 
+    # paramters into consideration such as the fint and the placement of the text on the screen. 
     def draw_text(self, text, size, color, x, y):
         font_name = pg.font.match_font('arial')
         font = pg.font.Font(font_name, size)
@@ -75,24 +80,44 @@ class Game:
         text_rect = text_surface.get_rect()
         text_rect.midtop = (x,y)
         self.screen.blit(text_surface, text_rect)
+    # This defines the properties for the platforms. As the sprite collides with the platforms, they vary as some are bouncey 
+    # and others disappear on impact. This changes depending on whether the author of the code indicates that the player jumps 
+    # upon collision or the platform is killed on collision. 
     def update(self):
         self.all_sprites.update()
         if self.player.vel.y > 0:
-            hits = pg.sprite.spritecollide(self.player, self.platforms, False)
-            if hits:
-                if hits[0].variant == "disappearing":
-                    hits[0].kill()
-                elif hits[0].variant == "bouncey":
-                    self.player.pos.y = hits[0].rect.top
+            hitsplatform = pg.sprite.spritecollide(self.player, self.platforms, False)
+            if hitsplatform:
+                if hitsplatform[0].variant == "disappearing":
+                    hitsplatform[0].kill()
+                elif hitsplatform[0].variant == "bouncey":
+                    self.player.pos.y = hitsplatform[0].rect.top
                     self.player.vel.y = -PLAYER_JUMP
                 else:
-                    self.player.pos.y = hits[0].rect.top
+                    self.player.pos.y = hitsplatform[0].rect.top
                     self.player.vel.y = 0
+        hitsenemy = pg.sprite.spritecollide(self.player, self.enemies, False)
+        if hitsenemy:
+                if hitsenemy[0]:
+                    print("infected!!")
+                    print(self.health)
+                    self.health -= 5
+                if self.health <= 0:
+                    print("GAME OVER!!")
+        
+                    
+                
+            
+
+
+
+    # This draws the background of the screen and utilizes the draw_text function to write "Abdullah's Game" on the screen. 
     def draw(self):
         self.screen.fill(BLUE)
-        self.draw_text("Abdullah's Game", 24, WHITE, WIDTH/2, HEIGHT/2)
+        self.draw_text("DON'T TOUCH THE VIRUS", 24, WHITE, WIDTH/2, HEIGHT/2)
         self.all_sprites.draw(self.screen)
         pg.display.flip()
+ 
       
     
     def get_mouse_now(self):
